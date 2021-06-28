@@ -538,7 +538,7 @@ public class l001 {
         return ans;
     }
 
-    public static ArrayList<Integer> verticalOrderSum(TreeNode root) {
+    public static ArrayList<Integer> verticalOrderSumBT(TreeNode root) {
         LinkedList<vPair> que = new LinkedList<>();
         int[] minMax = new int[2];
         widthOfShadow(root, 0, minMax);
@@ -569,7 +569,7 @@ public class l001 {
         return ans;
     }
 
-    public static ArrayList<Integer> diagonalOrderSum(TreeNode root) {
+    public static ArrayList<Integer> diagonalOrderSumBT(TreeNode root) {
         LinkedList<TreeNode> que = new LinkedList<>();
 
         ArrayList<Integer> ans = new ArrayList<>();
