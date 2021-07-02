@@ -256,5 +256,26 @@ public class DiaSet {
             return Math.max(ans[0],ans[1]);
         }
     }
-
+    // 1372
+    class Solution {
+        public int[] helper(TreeNode root){
+            if(root == null)
+                return new int[]{-1,-1,-1};
+            int lans[] = helper(root.left);
+            int rans[] = helper(root.right);
+            
+            int[] myAns = new int[3];
+            myAns[0] = lans[1] + 1;
+            myAns[1] = rans[0] + 1;
+            myAns[2] = Math.max(Math.max(lans[2],rans[2]),Math.max(myAns[0],myAns[1]));
+            return myAns;
+        }
+        public int longestZigZag(TreeNode root) {
+            int[] ans = helper(root);
+    
+            return ans[2];
+        }
+    }
+    
+    
 }
