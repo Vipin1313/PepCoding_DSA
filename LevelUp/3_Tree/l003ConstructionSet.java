@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.*;
 
 public class l003ConstructionSet {
 
@@ -9,6 +9,16 @@ public class l003ConstructionSet {
 
         TreeNode(int val) {
             this.val = val;
+        }
+    }
+
+    public static class Node {
+        int data = 0;
+        Node left = null;
+        Node right = null;
+
+        Node(int data) {
+            this.data = data;
         }
     }
 
@@ -133,45 +143,108 @@ public class l003ConstructionSet {
 
         return root;
     }
-    // public static TreeNode preOrPost(int[] pre, int presi, int preei, int[] post, int posi, int poei){
-         
-    // }
-    
-    public static TreeNode getLeftMost(TreeNode node){
-        if(node == null)
-          return null;
-        while(node.left!=null){
+
+    // 889. Construct Binary Tree from Preorder and Postorder Traversal
+    class Solution {
+        public TreeNode constructFromPrePost(int[] pre, int[] post) {
+            int n = pre.length;
+            return construct(pre, 0, n - 1, post, 0, n - 1);
+        }
+
+        public TreeNode construct(int[] pre, int psi, int pei, int[] post, int ppsi, int ppei) {
+            if (psi > pei)
+                return null;
+
+            TreeNode root = new TreeNode(pre[psi]);
+            if (psi == pei)
+                return root;
+            int idx = ppsi;
+            while (post[idx] != pre[psi + 1])
+                idx++;
+
+            int tnel = idx - ppsi + 1;
+            root.left = construct(pre, psi + 1, psi + tnel, post, ppsi, idx);
+            root.right = construct(pre, psi + tnel + 1, pei, post, idx + 1, ppei + 1);
+
+            return root;
+        }
+    }
+
+    public static TreeNode getLeftMost(TreeNode node) {
+        if (node == null)
+            return null;
+        while (node.left != null) {
             node = node.left;
         }
         return node;
     }
-    public static TreeNode getRightMost(TreeNode node){
-        if(node == null)
-          return null;
-        while(node.right!= null){
+
+    public static TreeNode getRightMost(TreeNode node) {
+        if (node == null)
+            return null;
+        while (node.right != null) {
             node = node.right;
         }
         return node;
     }
+
     public static void predecessorSuccessor(TreeNode node, int data) {
         TreeNode curr = node, predecessor = null, successor = null;
-        while(curr!=null){
-            if(node.val == data){
+        while (curr != null) {
+            if (node.val == data) {
                 TreeNode leftMost = getLeftMost(node.right);
                 successor = leftMost != null ? leftMost : successor;
 
                 TreeNode rigthMost = getRightMost(node.left);
                 predecessor = rigthMost != null ? rigthMost : predecessor;
-            }
-            else if(node.val < data){
+            } else if (node.val < data) {
                 predecessor = node;
-                curr  = curr.right;
-            }
-            else{
+                curr = curr.right;
+            } else {
                 successor = node;
                 curr = curr.left;
             }
         }
     }
+
+    // Construct tree from Inorder and LevelOrder
+    class GfG {
+        int search(int[] level, HashSet<Integer> hs, int k) {
+            for (int i = k; i < level.length; i++) {
+                if (hs.contains(level[i]))
+                    return i;
+            }
+            return -1;
+        }
+
+        Node buildTree(int inord[], int level[], int isi, int iei, int lcurr, HashMap<Integer, Integer> map) {
+            if (isi <= iei && lcurr != -1) {
+                int mid = map.get(level[lcurr]);
+                Node root = new Node(level[lcurr]);
+                HashSet<Integer> ls = new HashSet<>();
+                HashSet<Integer> rs = new HashSet<>();
+                for (int i = isi; i < mid; i++)
+                    ls.add(inord[i]);
+                for (int i = mid; i <= iei; i++)
+                    rs.add(inord[i]);
+                int lind = search(level, ls, lcurr + 1);
+                int rind = search(level, rs, lcurr + 1);
+                root.left = buildTree(inord, level, isi, mid - 1, lind, map);
+                root.right = buildTree(inord, level, mid, iei, rind, map);
+                return root;
+            }
+            return null;
+        }
+
+        Node buildTree(int inord[], int level[]) {
+            // your code here
+            HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+            for (int i = 0; i < inord.length; i++)
+                map.put(inord[i], i);
+            return buildTree(inord, level, 0, inord.length - 1, 0, map);
+        }
+    }
+
+    
 
 }
