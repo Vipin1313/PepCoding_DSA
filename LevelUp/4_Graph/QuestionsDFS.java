@@ -2,14 +2,14 @@ import java.util.*;
 
 public class QuestionsDFS {
     // 200
-    public void dfs(char[][] grid, int i, int j, int[][] dir) {
+    public void dfs_numIslands(char[][] grid, int i, int j, int[][] dir) {
         grid[i][j] = '0';
         int n = grid.length, m = grid[0].length;
         for (int d = 0; d < dir.length; d++) {
             int r = i + dir[d][0];
             int c = j + dir[d][1];
             if (r >= 0 && c >= 0 && r < n && c < m && grid[r][c] == '1') {
-                dfs(grid, r, c, dir);
+                dfs_numIslands(grid, r, c, dir);
             }
         }
     }
@@ -20,7 +20,7 @@ public class QuestionsDFS {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (grid[i][j] == '1') {
-                    dfs(grid, i, j, dir);
+                    dfs_numIslands(grid, i, j, dir);
                     islands++;
                 }
             }
@@ -110,6 +110,66 @@ public class QuestionsDFS {
         }
     }
 
+    // 694
+    static int n, m;
+    static StringBuilder sb;
+    static int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+    static String[] dirS = { "D", "U", "R", "L" };
+
+    public static void dfs_noOfDistinctIsland(int[][] grid, int i, int j) {
+        grid[i][j] = 0;
+        for (int d = 0; d < 4; d++) {
+            int r = i + dir[d][0];
+            int c = j + dir[d][1];
+            if (r >= 0 && c >= 0 && r < n && c < m && grid[r][c] == 1) {
+                sb.append(dirS[d]);
+                dfs_noOfDistinctIsland(grid, r, c);
+            }
+        }
+        sb.append("b");
+    }
+
+    public static int noOfDistinctIsland(int[][] grid) {
+        n = grid.length;
+        m = grid[0].length;
+        HashSet<String> set = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1) {
+                    sb = new StringBuilder();
+                    dfs_noOfDistinctIsland(grid, i, j);
+                    set.add(sb.toString());
+                }
+            }
+        }
+        return set.size();
+    }
+     
+    //1905
+    public boolean countSubIslands(int[][] grid1, int[][] grid2,int i, int j) {
+        grid2[i][j] = 0;
+        boolean res = true;
+        int n = grid2.length, m = grid2[0].length;
+        for(int d=0;d<4;d++){
+            int r = i + dir[d][0];
+            int c = j + dir[d][1];
+            if(r >= 0 && c >= 0 && r < n && c < m && grid2[r][c] == 1){
+                res = countSubIslands(grid1,grid2,r,c) && res;
+            }
+        }
+        return res && grid1[i][j] == 1;
+    }
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        int n = grid2.length, m = grid2[0].length, count = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(grid2[i][j] == 1)
+                    count += countSubIslands(grid1,grid2,i,j) ? 1 : 0;
+            }
+        }
+        return count;
+    }
+    
     // 1091
     public int shortestPathBinaryMatrix(int[][] grid) {
 
