@@ -121,9 +121,7 @@ public class ConstructGraph {
         removeEdge(graph, 3, 0);
         display(graph);
     }
-
     public static void main(String[] args) {
         constructGraph();
-
     }
 }
