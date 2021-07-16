@@ -169,19 +169,4 @@ public class QuestionsDFS {
         }
         return count;
     }
-    
-    // 1091
-    public int shortestPathBinaryMatrix(int[][] grid) {
-
-    }
-
-    // 542
-    public int[][] updateMatrix(int[][] mat) {
-
-    }
-
-    // 886
-    public boolean possibleBipartition(int n, int[][] dislikes) {
-
-    }
 }

@@ -211,4 +211,41 @@ public class QuestionsBFS {
         }
     }
 
+    // 886
+    public boolean possibleBipartition(int n, int[][] dislikes) {
+        public boolean possibleBipartition(int n, int[][] dislikes) {
+            ArrayList<Integer>[] graph=new ArrayList[n+1];
+            int[] team=new int[n+1];
+            
+            for(int i=1;i<n+1;i++){
+                graph[i]=new ArrayList<>();
+            }
+            
+            for(int i=0;i<dislikes.length;i++){
+                graph[dislikes[i][0]].add(dislikes[i][1]);
+                graph[dislikes[i][1]].add(dislikes[i][0]);
+            }
+            
+            //BFS
+            Queue<Integer> q=new ArrayDeque();
+            for(int i=1;i<=n;i++){
+                if(team[i]==0){
+                    q.add(i);
+                    team[i]=1;
+                    while(q.size()>0){
+                        int x=q.remove();
+                        for(int k:graph[x]){
+                            if(team[x]==team[k])return false;
+                            if(team[k]==0){
+                                team[k]= -team[x];
+                                q.add(k);
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
 }
