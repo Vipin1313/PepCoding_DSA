@@ -84,6 +84,54 @@ public class DirectedGraph {
         return ans;
     }
 
+    //329
+    public int longestIncreasingPath(int[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        
+        int[][] dir = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        int[][] indegree = new int[n][m];
+        LinkedList<Integer> que = new LinkedList<>();
+        
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                for(int d=0;d<4;d++){
+                    int r = i + dir[d][0];
+                    int c = j + dir[d][1];
+                    
+                    if(r >= 0 && c>=0 && r < n && c < m && matrix[r][c] < matrix[i][j])
+                        indegree[i][j]++;
+                }
+                if(indegree[i][j] == 0)
+                   que.addLast(i*m+j);
+            }
+        }
+        ArrayList<Integer> ans = new ArrayList<>();
+        
+        int level=0;
+        
+        while(que.size()!=0){
+            int size=que.size();
+            while(size-->0){
+                int ridx=que.removeFirst();
+                int x=ridx/m;
+                int y=ridx%m;
+                
+                for(int d=0;d<4;d++){
+                    int r=x+dir[d][0];
+                    int c=y+dir[d][1];
+                    
+                    if(r>=0 && c>=0 && r<n && c<m && matrix[r][c]>matrix[x][y]){
+                        if(--indegree[r][c]==0){
+                            que.addLast(r*m+c);
+                        }
+                    }
+                }
+            }
+            level++;
+        }
+        return level;
+    }
     public static void constructGraph() {
         int N = 7;
         ArrayList<Edge>[] graph = new ArrayList[N];
