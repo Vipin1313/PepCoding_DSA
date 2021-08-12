@@ -234,6 +234,38 @@ public class basics_levelup {
         return ll.getLast();
     }
 
+    public static int boardPath_memo02(int n,int[] arr, int[] dp) {
+        if (n == 0) {
+            return dp[n] = 1;
+        }
+
+        if (dp[n] != 0)
+            return dp[n];
+
+        int count = 0;
+        for (int dice = 0; dice < arr.length && n - arr[dice] >= 0; dice++) {
+            count += boardPath_memo02(n - arr[dice], arr, dp);
+        }
+
+        return dp[n] = count;
+    }
+
+    public static int boardPath_tabu02(int N, int[] arr, int[] dp) {
+        for (int n = 0; n <= N; n++) {
+            if (n == 0) {
+                dp[n] = 1;
+                continue;
+            }
+
+            int count = 0;
+            for (int dice = 0; dice < arr.length && n - arr[dice] >= 0; dice++) {
+                count += dp[n - arr[dice]];// boardPath_memo(n - dice, dp);
+            }
+
+            dp[n] = count;
+        }
+        return dp[N];
+    }
     public static void boardPath() {
         int n = 20;
         int[] dp = new int[n + 1];
